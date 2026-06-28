@@ -1,0 +1,4 @@
+# The kit is plain text; ignore only local cruft.
+.DS_Store
+*.kit
+*.tmp
