@@ -15,15 +15,22 @@ main (demo-safe) <- hack/integration <- hack/<owner>/<feature>
 
 ## Starting A Lane
 
-From the integration checkout:
+The recommended path reads available work from the project documentation:
 
 ```bash
 git fetch --all --prune
+python3 tools/hack_join.py
+```
+
+For a lane that is not listed on the board, the captain may use the lower-level command:
+
+```bash
 sh tools/hack_start.sh <feature> --owner <name> --base hack/integration
 ```
 
-The helper creates a sibling worktree, a `hack/<owner>/<feature>` branch, and a lane record.
-Commit the filled record early and open a draft PR when teammates work on other machines.
+Both commands create a sibling worktree, a `hack/<owner>/<feature>` branch, and a lane record.
+`hack_join.py` also copies acceptance, claim, and dependency context from `TEAM_BOARD.md`. Commit
+the record early and open a draft PR when teammates work on other machines.
 
 ## Ready Gate
 

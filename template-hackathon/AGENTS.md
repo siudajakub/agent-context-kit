@@ -10,10 +10,10 @@ for a coherent judged experience, not the number of partially built features.
 
 ## Start Every Work Session
 
-1. Run `python3 tools/hack_status.py` and check [TEAM_BOARD.md](TEAM_BOARD.md).
-2. Read [contracts](docs/hackathon/contracts.md) for the boundaries your lane consumes or owns.
-3. For a new lane, run `sh tools/hack_start.sh <feature>` from the integration checkout.
-4. Fill the generated lane record before implementation and keep its next step current.
+1. If you do not own a lane, run `python3 tools/hack_join.py` and select work from the project docs.
+2. Otherwise, run `python3 tools/hack_status.py` and check [TEAM_BOARD.md](TEAM_BOARD.md).
+3. Read [contracts](docs/hackathon/contracts.md) for the boundaries your lane consumes or owns.
+4. Keep the generated lane record's current state and next step current.
 
 ## Team Topology
 

@@ -15,8 +15,8 @@ ownership is unavoidable, freeze request/response examples and fixtures before b
 
 ## Working Loop
 
-1. Start from the latest `hack/integration` with `sh tools/hack_start.sh <feature>`.
-2. Fill the generated lane claim, acceptance, dependencies, and fallback.
+1. Run `python3 tools/hack_join.py` and select an available lane defined in `TEAM_BOARD.md`.
+2. Review the prefilled claim, acceptance, and dependencies; then add the fallback.
 3. Commit a thin end-to-end skeleton early; push a draft PR so distributed teammates see it.
 4. Integrate at contracts, not guesses. Use a deterministic fixture until a dependency lands.
 5. Re-sync with integration before declaring READY and resolve conflicts in the feature lane.

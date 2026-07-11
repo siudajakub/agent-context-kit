@@ -103,9 +103,9 @@ echo "Next steps:"
 if [ "$profile" = "hackathon" ]; then
   echo "  1. Fill HACKATHON.md and choose the integration captain/base branch."
   echo "  2. Fill AGENTS.md commands and docs/hackathon/contracts.md boundaries."
-  echo "  3. Each contributor starts with: sh tools/hack_start.sh <feature>"
+  echo "  3. Define AVAILABLE work in TEAM_BOARD.md."
   echo "  4. Run the validator:  python3 tools/check_agent_docs.py"
-  echo "  5. Commit. Claude hooks activate on the next session."
+  echo "  5. Commit. Each contributor joins with: python3 tools/hack_join.py"
 else
   echo "  1. Edit AGENTS.md: Product, Core Rules, and Commands for this project."
   echo "  2. Fill PROJECT_STATUS.md / ROADMAP.md and the docs/engineering/* placeholders."

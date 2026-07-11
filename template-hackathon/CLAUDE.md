@@ -6,9 +6,10 @@ Claude Code entry point for this hackathon repository. The canonical rules are i
 ## Session Startup
 
 1. Read [AGENTS.md](AGENTS.md) and [HACKATHON.md](HACKATHON.md).
-2. Run `python3 tools/hack_status.py` to see active worktrees, branches, and lane claims.
-3. Read any overlapping record under [`docs/lanes/`](docs/lanes/README.md).
-4. Load the relevant boundary from [contracts.md](docs/hackathon/contracts.md).
+2. If this session has no lane, run `python3 tools/hack_join.py` and let the user select one.
+3. Otherwise, run `python3 tools/hack_status.py` and read overlapping records under
+   [`docs/lanes/`](docs/lanes/README.md).
+4. Load the selected boundary from [contracts.md](docs/hackathon/contracts.md).
 
 `SessionStart` and `PreCompact` hooks run `tools/hack_context.sh`. They surface active lanes and
 remind the session to update its lane record before context compaction. The hooks are read-only.

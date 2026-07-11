@@ -30,15 +30,17 @@ than long-lived documentation.
 | Avoid late scope collapse | Absolute freezes, fallback/cut plan, and golden path in `HACKATHON.md` |
 | Survive demo failures | Exact artifact, reset commands, deterministic fixtures, and backup in the demo runbook |
 
-Start a contributor lane with one command:
+After the captain defines `AVAILABLE` rows in `TEAM_BOARD.md`, each contributor runs:
 
 ```bash
-sh tools/hack_start.sh payments --owner ola --base hack/integration
+python3 tools/hack_join.py
 ```
 
-It creates `hack/ola/payments`, a sibling worktree, and a prefilled lane handoff. Before queueing
-the work for integration, run `sh tools/hack_ready.sh`; it checks branch freshness, a clean tree,
-conflict markers, documentation integrity, and optionally a command passed after `--`.
+The onboarding shows the project mission and unclaimed work, then asks the contributor to select
+a lane. It creates `hack/<owner>/<feature>`, a sibling worktree, and a lane handoff prefilled with
+the documented acceptance, claim, and dependencies. Before queueing the work for integration,
+run `sh tools/hack_ready.sh`; it checks branch freshness, a clean tree, conflict markers,
+documentation integrity, and optionally a command passed after `--`.
 
 The model works on one machine without a server. For a distributed team, commit the lane record,
 push a draft PR early, and run `git fetch --all --prune` before `tools/hack_status.py` so remote
@@ -208,8 +210,9 @@ convenience (placeholder substitution, sidecars for existing files, `chmod +x`).
 4. Commit. The hooks activate on the next Claude Code session.
 
 For the hackathon profile, fill `HACKATHON.md`, assign the integration captain, create
-`hack/integration`, freeze the first cross-lane contracts, and let each contributor create a lane
-with `tools/hack_start.sh`. The full cadence is in `docs/hackathon/playbook.md` after installation.
+`hack/integration`, freeze the first cross-lane contracts, and define `AVAILABLE` work in
+`TEAM_BOARD.md`. Each contributor then runs `python3 tools/hack_join.py`. The full cadence is in
+`docs/hackathon/playbook.md` after installation.
 
 ---
 

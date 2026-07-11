@@ -18,7 +18,7 @@ REQUIRED_FILES = (
 )
 REQUIRED_TOOLS = (
     "tools/hack_start.sh", "tools/hack_ready.sh", "tools/hack_context.sh",
-    "tools/hack_status.py",
+    "tools/hack_status.py", "tools/hack_join.py",
 )
 REQUIRED_LANE_HEADINGS = (
     "## Acceptance", "## Claim", "## Contracts And Dependencies", "## Current State",
@@ -79,6 +79,13 @@ def main() -> int:
             if heading not in text:
                 errors.append(f"docs/lanes/TEMPLATE.md: missing heading: {heading}")
 
+    board = ROOT / "TEAM_BOARD.md"
+    if board.is_file():
+        text = board.read_text(encoding="utf-8")
+        expected = "| Slug | Outcome / acceptance | Claim | Contract / dependency | Priority | State |"
+        if expected not in text:
+            errors.append("TEAM_BOARD.md: Available Work table has unexpected columns")
+
     validate_hooks(errors)
     for script in ("tools/hack_start.sh", "tools/hack_ready.sh", "tools/hack_context.sh"):
         path = ROOT / script
@@ -86,6 +93,13 @@ def main() -> int:
             result = subprocess.run(["sh", "-n", str(path)], capture_output=True, text=True)
             if result.returncode:
                 errors.append(f"{script}: shell syntax error: {result.stderr.strip()}")
+    for script in ("tools/check_agent_docs.py", "tools/hack_status.py", "tools/hack_join.py"):
+        path = ROOT / script
+        if path.is_file():
+            try:
+                compile(path.read_text(encoding="utf-8"), str(path), "exec")
+            except SyntaxError as exc:
+                errors.append(f"{script}: Python syntax error: {exc}")
 
     if errors:
         print("Hackathon context validation failed:")

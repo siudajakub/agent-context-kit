@@ -3,9 +3,10 @@
 One branch-local record per concurrent feature lane. It preserves the context needed for another
 person or agent to review, integrate, cut, or resume the lane without a meeting.
 
-Create a lane with `sh tools/hack_start.sh <feature>`. Do not copy the template manually unless a
-worktree already exists. A record owns only its lane; shared priorities live in `TEAM_BOARD.md`
-and shared interfaces live in `docs/hackathon/contracts.md`.
+Join with `python3 tools/hack_join.py`. It reads `HACKATHON.md` and `TEAM_BOARD.md`, offers
+available work, creates the branch/worktree, and prefills the selected lane. Captains can use
+`sh tools/hack_start.sh <feature>` for unplanned work. A record owns only its lane; shared
+priorities live in `TEAM_BOARD.md` and shared interfaces live in `docs/hackathon/contracts.md`.
 
 ## Rules
 

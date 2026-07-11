@@ -1,16 +1,31 @@
 # Team Board
 
-The integration captain maintains this compact view on `hack/integration`. It is coordination,
-not a historical log. Feature owners update their own lane record and PR; the captain reflects
-state transitions here to avoid merge conflicts in this shared file.
+The integration captain maintains this view on `hack/integration`. Before contributors join, the
+captain defines small, non-overlapping choices under **Available Work**. Contributors run
+`python3 tools/hack_join.py`; the tool reads this file and creates their selected lane.
 
-## Lanes
+## Available Work
+
+Each row must contain a unique lowercase kebab-case slug. Write an observable outcome and a
+concrete, non-overlapping file/module claim. `hack_join.py` offers rows whose state is `AVAILABLE`
+and whose slug has no active `hack/*/<slug>` branch.
+
+| Slug | Outcome / acceptance | Claim | Contract / dependency | Priority | State |
+| --- | --- | --- | --- | --- | --- |
+| `golden-path-shell` | <observable result that proves this lane is done> | `src/app/**` | <contract name or `none`> | P0 | AVAILABLE |
+
+Allowed planning states: `AVAILABLE`, `PAUSED`, `CUT`.
+
+## Active Lanes
+
+Feature owners update their branch-local record and PR. The captain reflects state transitions
+here; contributors do not edit this table from feature branches.
 
 | Lane | Owner | Branch / PR | Contract boundary | State | Next integration action |
 | --- | --- | --- | --- | --- | --- |
-| <golden-path shell> | <name> | `hack/name/shell` / <url> | <routes/components> | PLANNED | <first action> |
+| <golden-path shell> | <name> | `hack/name/shell` / <url> | <routes/components> | ACTIVE | <first action> |
 
-Allowed states: `PLANNED`, `ACTIVE`, `BLOCKED`, `READY`, `INTEGRATED`, `CUT`.
+Allowed delivery states: `ACTIVE`, `BLOCKED`, `READY`, `INTEGRATED`, `CUT`.
 
 ## Merge Train
 

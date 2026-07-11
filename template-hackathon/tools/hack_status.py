@@ -159,7 +159,7 @@ def main() -> int:
         return 1
 
     if not lanes:
-        print("No feature lanes found. Start one with: sh tools/hack_start.sh <feature>")
+        print("No feature lanes found. Choose documented work with: python3 tools/hack_join.py")
         return 0
 
     for lane in lanes:
