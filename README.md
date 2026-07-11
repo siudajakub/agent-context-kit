@@ -8,6 +8,42 @@ get: one canonical rules file every agent reads first, a dated status snapshot, 
 worklogs, hooks that surface other sessions' work automatically, and a validator that keeps the
 whole thing from rotting.
 
+It ships in two profiles:
+
+- **standard** — durable project memory for ongoing repositories (the original kit),
+- **hackathon** — a time-boxed team operating system for parallel feature lanes, worktrees,
+  contract-first fan-out, a single merge train, and a rehearsed demo.
+
+## Hackathon profile (v2)
+
+The hackathon profile is deliberately more operational than the standard kit. It assumes several
+humans and agents are shipping at once, the deadline is fixed, and integration risk matters more
+than long-lived documentation.
+
+| Need | Mechanism |
+| --- | --- |
+| Split work without collisions | One `hack/<owner>/<feature>` lane and sibling worktree per writer |
+| Keep frontend/backend or service lanes compatible | Frozen examples and failure behavior in `docs/hackathon/contracts.md` |
+| See local and remote work | `tools/hack_status.py` aggregates worktrees and fetched `hack/*` refs |
+| Preserve cold-resume context | One branch-local record under `docs/lanes/` per feature |
+| Keep integration runnable | Captain-owned `hack/integration` merge train; `main` stays demo-safe |
+| Avoid late scope collapse | Absolute freezes, fallback/cut plan, and golden path in `HACKATHON.md` |
+| Survive demo failures | Exact artifact, reset commands, deterministic fixtures, and backup in the demo runbook |
+
+Start a contributor lane with one command:
+
+```bash
+sh tools/hack_start.sh payments --owner ola --base hack/integration
+```
+
+It creates `hack/ola/payments`, a sibling worktree, and a prefilled lane handoff. Before queueing
+the work for integration, run `sh tools/hack_ready.sh`; it checks branch freshness, a clean tree,
+conflict markers, documentation integrity, and optionally a command passed after `--`.
+
+The model works on one machine without a server. For a distributed team, commit the lane record,
+push a draft PR early, and run `git fetch --all --prune` before `tools/hack_status.py` so remote
+claims are visible too.
+
 ---
 
 ## The problem it solves
@@ -123,8 +159,9 @@ Worklogs are committed, so a worktree on another machine sees the same claims. S
 | `tools/check_agent_docs.py` | Automation | Validates docs, links, the AGENTS.md line limit, and hook wiring. |
 | `.claude/settings.json` | Automation | `SessionStart` + `PreCompact` hooks that run `session_context.sh`. |
 
-Everything ships under `template/`; the files at the repo root (`README.md`, `install.sh`,
-`LICENSE`) are the kit itself, not part of what gets installed.
+The standard profile ships under `template/` and the hackathon profile under
+`template-hackathon/`; the files at the repo root (`README.md`, `install.sh`, `LICENSE`) are the
+kit itself, not part of what gets installed.
 
 ---
 
@@ -136,6 +173,12 @@ From the target project's root:
 sh /path/to/agent-context-kit/install.sh . --name "My Project"
 ```
 
+For a hackathon team:
+
+```bash
+sh /path/to/agent-context-kit/install.sh . --profile hackathon --name "My Project"
+```
+
 Or point it at any directory:
 
 ```bash
@@ -143,11 +186,12 @@ sh /path/to/agent-context-kit/install.sh ~/code/my-project --name "My Project"
 ```
 
 - `--name` replaces the `{{PROJECT_NAME}}` placeholder in copied files. Omit it to edit by hand.
+- `--profile` selects `standard` (default) or `hackathon`.
 - Files that already exist are **never overwritten**; the kit's version is written as `<file>.kit`
   next to it so you can merge (handy when the repo already has a `CLAUDE.md` or
   `.claude/settings.json`). Pass `--force` to overwrite instead.
 
-You can also just copy `template/`'s contents into the repo by hand — the script only adds
+You can also copy the selected template directory's contents into the repo by hand — the script adds
 convenience (placeholder substitution, sidecars for existing files, `chmod +x`).
 
 ### After installing
@@ -162,6 +206,10 @@ convenience (placeholder substitution, sidecars for existing files, `chmod +x`).
    ```
 
 4. Commit. The hooks activate on the next Claude Code session.
+
+For the hackathon profile, fill `HACKATHON.md`, assign the integration captain, create
+`hack/integration`, freeze the first cross-lane contracts, and let each contributor create a lane
+with `tools/hack_start.sh`. The full cadence is in `docs/hackathon/playbook.md` after installation.
 
 ---
 

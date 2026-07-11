@@ -1,0 +1,75 @@
+# {{PROJECT_NAME}} Hackathon Agent Guide
+
+Canonical rules for every human and coding agent in this hackathon repository. Read this file,
+then [HACKATHON.md](HACKATHON.md), before changing code.
+
+## Mission
+
+Ship the smallest reliable end-to-end demo described in [HACKATHON.md](HACKATHON.md). Optimize
+for a coherent judged experience, not the number of partially built features.
+
+## Start Every Work Session
+
+1. Run `python3 tools/hack_status.py` and check [TEAM_BOARD.md](TEAM_BOARD.md).
+2. Read [contracts](docs/hackathon/contracts.md) for the boundaries your lane consumes or owns.
+3. For a new lane, run `sh tools/hack_start.sh <feature>` from the integration checkout.
+4. Fill the generated lane record before implementation and keep its next step current.
+
+## Team Topology
+
+- `main` is the last known demo-safe branch. Do not develop directly on it.
+- `hack/integration` is the merge train and default base for all lanes.
+- `hack/<owner>/<feature>` is one narrow, independently reviewable lane.
+- One integration captain owns merges into `hack/integration` and promotion to `main`.
+- One worktree per writer. Never share a checkout or Git index between concurrent writers.
+
+## Scope And Ownership
+
+- Every lane has one owner, one acceptance statement, and an explicit file/module claim.
+- Do not edit another lane's claimed surface without coordinating first.
+- Agree on interfaces, schemas, routes, events, and fixtures in
+  [contracts.md](docs/hackathon/contracts.md) before dependent lanes fan out.
+- Prefer adapters, mocks, and feature flags at lane boundaries over waiting on another lane.
+- If a dependency changes, notify its consumers and update the contract in the same integration
+  wave. Only the integration captain edits shared control-plane docs on the integration branch.
+
+## Commands
+
+Replace the project placeholders below with exact commands; agents must use them verbatim.
+
+```bash
+<install>       # dependency install
+<fast-check>    # lint + focused unit tests
+<full-check>    # integration/e2e + production build
+python3 tools/check_agent_docs.py
+```
+
+## Delivery Rules
+
+- Build vertical demo slices: UI to real or stable mocked data, including failure/loading paths.
+- Keep commits small enough to cherry-pick or revert; never mix cleanup with a feature lane.
+- Put risky or incomplete behavior behind a default-off flag.
+- No secrets, personal data, debug endpoints, or credentials in commits or demo fixtures.
+- Preserve unrelated changes and generated artifacts; do not rewrite shared history after review.
+- When blocked for more than 15 minutes, record the blocker, create a fallback, and tell the
+  integration captain. Do not silently wait.
+
+## Ready For Integration
+
+A lane is ready only when it has a clean worktree, focused commits, current lane notes, no
+unresolved markers, and its required fast checks pass. Run `sh tools/hack_ready.sh` for the
+structural gate, then follow [integration.md](docs/hackathon/integration.md).
+
+## Definition Of Demo-Done
+
+- The golden path works from a clean checkout using documented commands.
+- The demo has deterministic seed/sample data and a rehearsed fallback.
+- Full checks pass on the exact commit promoted to `main`.
+- The team can explain the problem, differentiator, architecture, and honest limitations.
+- [Demo runbook](docs/hackathon/demo.md) names the presenter, script, reset steps, and backup.
+
+## Working Mode
+
+- During planning, clarify ownership, contracts, and acceptance before parallelizing.
+- During execution, finish the whole lane, including integration notes and verification.
+- Cut scope before cutting the golden path's reliability.

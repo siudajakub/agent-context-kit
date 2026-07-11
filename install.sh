@@ -2,9 +2,10 @@
 # Install the agent-context kit into a target project.
 #
 # Usage:
-#   sh install.sh [target-dir] [--name "Project Name"] [--force]
+#   sh install.sh [target-dir] [--profile standard|hackathon] [--name "Project Name"] [--force]
 #
 #   target-dir    Where to install (default: current directory).
+#   --profile     Install the standard kit (default) or the hackathon team kit.
 #   --name NAME   Replace the {{PROJECT_NAME}} placeholder in copied files.
 #   --force       Overwrite files that already exist (default: skip and report them).
 #
@@ -15,22 +16,30 @@
 set -eu
 
 KIT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
-SRC="$KIT_DIR/template"
 
 target="."
 name=""
 force=0
+profile="standard"
 
 while [ $# -gt 0 ]; do
   case "$1" in
     --name) name="${2:-}"; shift 2 ;;
     --name=*) name="${1#--name=}"; shift ;;
+    --profile) profile="${2:-}"; shift 2 ;;
+    --profile=*) profile="${1#--profile=}"; shift ;;
     --force) force=1; shift ;;
     -h|--help) sed -n '2,12p' "$0"; exit 0 ;;
     -*) echo "unknown option: $1" >&2; exit 2 ;;
     *) target="$1"; shift ;;
   esac
 done
+
+case "$profile" in
+  standard) SRC="$KIT_DIR/template" ;;
+  hackathon) SRC="$KIT_DIR/template-hackathon" ;;
+  *) echo "unknown profile: $profile (expected standard or hackathon)" >&2; exit 2 ;;
+esac
 
 if [ ! -d "$SRC" ]; then
   echo "missing template directory: $SRC" >&2
@@ -86,11 +95,20 @@ sidecar=$(find "$SRC" -type f | while IFS= read -r f; do
 
 echo ""
 echo "Done. Installed into: $target"
+echo "  profile:        $profile"
 echo "  files written:  $copied"
 [ "$sidecar" -gt 0 ] && echo "  sidecars (.kit): $sidecar  — files that already existed; merge by hand"
 echo ""
 echo "Next steps:"
-echo "  1. Edit AGENTS.md: Product, Core Rules, and Commands for this project."
-echo "  2. Fill PROJECT_STATUS.md / ROADMAP.md and the docs/engineering/* placeholders."
-echo "  3. Run the validator:  python3 tools/check_agent_docs.py"
-echo "  4. Commit. The SessionStart/PreCompact hooks activate on the next Claude Code session."
+if [ "$profile" = "hackathon" ]; then
+  echo "  1. Fill HACKATHON.md and choose the integration captain/base branch."
+  echo "  2. Fill AGENTS.md commands and docs/hackathon/contracts.md boundaries."
+  echo "  3. Each contributor starts with: sh tools/hack_start.sh <feature>"
+  echo "  4. Run the validator:  python3 tools/check_agent_docs.py"
+  echo "  5. Commit. Claude hooks activate on the next session."
+else
+  echo "  1. Edit AGENTS.md: Product, Core Rules, and Commands for this project."
+  echo "  2. Fill PROJECT_STATUS.md / ROADMAP.md and the docs/engineering/* placeholders."
+  echo "  3. Run the validator:  python3 tools/check_agent_docs.py"
+  echo "  4. Commit. The SessionStart/PreCompact hooks activate on the next Claude Code session."
+fi
