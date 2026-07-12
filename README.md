@@ -248,3 +248,9 @@ internal links checked. Wire the validator into CI or a pre-commit hook to keep 
 ## License
 
 [MIT](LICENSE). Use it, fork it, adapt it.
+
+## Author
+
+Created and maintained by [Jakub Siuda](https://www.siuda.dev/about/), a 42 Warsaw student building AI products, developer tools and agent workflows.
+
+[Portfolio](https://www.siuda.dev/) · [GitHub profile](https://github.com/siudajakub)
